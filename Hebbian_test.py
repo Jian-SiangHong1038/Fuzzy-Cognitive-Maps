@@ -1,18 +1,12 @@
 # -*- coding: utf-8 -*-
 """
-Created on Thu Oct 13 22:16:15 2016
+Created on Sat Oct 29 22:51:23 2016
 
 @author: Eric
 """
-
-#from FCM import FCM
-#from FCM import simulation
-import math
 import FCM
-
-def transFunct(x):
-    return (1/(1+math.exp(-x)))
-
+from math import exp
+#declare the fcm for test
 test_fcm = FCM.FCM()
 
 test_fcm.add_concept("Tank1")
@@ -48,18 +42,17 @@ test_fcm.add_edge("Heat element","Therm_tank1",.6)
 test_fcm.add_edge("Therm_tank1","Heat element",.53)
 test_fcm.add_edge("Therm_tank1","Valve1",.4)
 test_fcm.add_edge("Therm_tank2","Valve2",.3)
+#make needed arguments for learning
+hebStableDict = {}
+hebStableDict["Valve3"] = .001
+hebStableDict["Valve1"] = .001
+hebStableDict["Valve2"] = .001
 
-test_fcm.draw()
+valve3Tup = (.5,.65)
+valve2Tup = (.65,.7)
+restraints = {}
+restraints['Valve3'] = valve3Tup
+restraints['Valve2'] = valve2Tup
 
-sim_test = FCM.simulation(test_fcm)
-
-sim_test.steps(10)
-
-sim_test.stabilize("Valve3", .001)
-
-sim_test.changeTransferFunction(transFunct)
-
-testList = sim_test.run()
-
-print ("\n\n\n\n")
-print (testList)
+print "The result of the hebbian learning was the following edge Matrix:"
+print FCM.Hebbian.hebbian_learning(test_fcm,restraints, hebStableDict,lambda x: 1/(1+exp(-x)),.2,100)

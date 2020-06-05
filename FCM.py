@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from types import FunctionType
 import inspect
 import sys
-
+from Simulation import simulation 
 
 '''
 This is a Python package for Fuzzy Cognitive Maps

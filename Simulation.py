@@ -8,7 +8,8 @@ from copy import deepcopy
 import numpy as np
 from sys import maxsize
 from networkx import to_numpy_matrix
-from FCM import FCM
+import FCM
+
 class simulation:
     def __init__(self, FCM):
         self.fcm = deepcopy(FCM)
@@ -29,7 +30,7 @@ class simulation:
     '''
     def stabilize(self, concept, threshold):
         if concept not in self.fcm.concepts():
-            print "Please input a valid concept"
+            print ("Please input a valid concept")
             return
         else:
             if concept not in self.stabilizers:
@@ -47,13 +48,13 @@ class simulation:
     '''
     def steps(self,numsteps):
         if type(numsteps) is not int:
-            print "Please input an integer"
+            print ("Please input an integer")
             return
         if numsteps > 0 and numsteps < maxsize:
             self.numSteps = numsteps
             
         else:
-            print "Please input a positive number of steps that is less than ", sys.maxsize
+            print ("Please input a positive number of steps that is less than ", sys.maxsize)
             return
     '''
     changeTransferFunction
@@ -64,11 +65,11 @@ class simulation:
     def changeTransferFunction(self,function):
         if callable(function):
             if function(100) > 1 or function(-100) < -1:
-                print "Error Transfer function must keep values in range [-1,1]"
+                print ("Error Transfer function must keep values in range [-1,1]")
             else:
                 self.transferFunction = function
         else:
-            print "Must pass a function"
+            print ("Must pass a function")
             
     '''     
     updateNodes(should only be called by run method)
@@ -84,7 +85,7 @@ class simulation:
         update = np.dot(self.edgeMatrix,values_vector)# get new vector of values to be added
         if c is not None:
             if type(c) is not float:
-                print "Weight c needs to be a decimal value"
+                print ("Weight c needs to be a decimal value")
                 return
             values_vector = values_vector*c
         newValues = np.add(values_vector, update) #values after addition
@@ -105,7 +106,7 @@ class simulation:
     '''
     def _is_Stable(self, oldNodes, newNodes): #oldNods and newNodes are lists
         for node in self.stabilizers:
-            index = self.fcm._fcm_graph.nodes().index(node)
+            index = list(self.fcm._fcm_graph.nodes()).index(node)
             if abs(newNodes[index] - oldNodes[index]) >= self.stableDict[node]:
                 return False
         
@@ -153,9 +154,9 @@ class simulation:
     def _output_results(self, conceptValues, steps):
         outDict = self._makeDict(conceptValues)            
             
-        print "The number of Steps was: ", steps
-        print "The Initial concept Values were: \n", self.fcm.concepts()
-        print "The final concept Values were: \n", outDict
+        print ("The number of Steps was: ", steps)
+        print ("The Initial concept Values were: \n", self.fcm.concepts())
+        print ("The final concept Values were: \n", outDict)
         #return outDict
     '''
     stable_concepts(called on init)
