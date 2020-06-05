@@ -21,7 +21,7 @@ to get optimal edge values for an FCM starting from an initial state.
 from sys import maxsize
 import numpy as np
 import networkx as nx
-from Simulation import simulation
+from Simulation import *
 #from FCM import FCM
 #from FCM import Simulation
 def hebbian_learning(fcm, restraints, stabilizers, transferFunct, neu, k = maxsize):

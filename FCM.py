@@ -3,8 +3,9 @@ import matplotlib.pyplot as plt
 from types import FunctionType
 import inspect
 import sys
-from Simulation import simulation 
+from Simulation import * 
 import Hebbian
+import ParallelServer
 '''
 This is a Python package for Fuzzy Cognitive Maps
 '''

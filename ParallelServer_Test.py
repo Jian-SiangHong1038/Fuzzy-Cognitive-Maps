@@ -1,7 +1,7 @@
 import FCM
-from FCM import simulation
+#from FCM import simulation
 import math, time
-
+#import ParallelServer
 def transFunct(x):
     return 1/(1+math.exp(-x))
 
@@ -81,14 +81,14 @@ FCMs = {}
 FCMs[fcm1] = stabilizers1
 FCMs[fcm2] = stabilizers2
 
-print "The result of simulating the two test FCMs on a server was:"
+print ("The result of simulating the two test FCMs on a server was:")
 FCM.ParallelServer.parallelS(FCMs)
 
-print "\n\nThe result of simulating the two test FCMs without parallelization was:"
+print ("\n\nThe result of simulating the two test FCMs without parallelization was:")
 
 start_time = time.time()
 
-sim1 = simulation(fcm1)
+sim1 = FCM.simulation(fcm1)
 
 sim1.steps(10000)
 
@@ -100,7 +100,7 @@ sim1.stabilize("Valve2", .001)
 
 sim1.run(.1)
 
-sim2 = simulation(fcm2)
+sim2 = FCM.simulation(fcm2)
 
 sim2.steps(10000)
 
@@ -111,7 +111,6 @@ sim2.stabilize("Livelihood",.001)
 
 sim2.run() 
 
-print "\nTime elapsed: ", time.time() - start_time, "s"
-
-print "\n\nThe result of using the transfer function on a server was:"
-FCM.ParallelServer.parallelT(10)
+print ("\nTime elapsed: ", time.time() - start_time, "s")
+#print ("\n\nThe result of using the transfer function on a server was:")
+#FCM.ParallelServer.parallelT(10)
