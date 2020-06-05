@@ -4,7 +4,7 @@ from types import FunctionType
 import inspect
 import sys
 from Simulation import simulation 
-
+import Hebbian
 '''
 This is a Python package for Fuzzy Cognitive Maps
 '''

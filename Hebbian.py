@@ -66,7 +66,7 @@ def hebbian_learning(fcm, restraints, stabilizers, transferFunct, neu, k = maxsi
             for col in range(0,numCols):
                 if edgeMatrix.item((row,col)) == 0:
                     continue
-                fcm.add_edge(fcm._fcm_graph.nodes()[row],fcm._fcm_graph.nodes()[col],edgeMatrix.item((row,col)))
+                fcm.add_edge(list(fcm._fcm_graph.nodes())[row], list(fcm._fcm_graph.nodes())[col],edgeMatrix.item((row,col)))
                 
         #now start a simultion with fcm
         sim = simulation(fcm)
@@ -80,13 +80,13 @@ def hebbian_learning(fcm, restraints, stabilizers, transferFunct, neu, k = maxsi
         
         ValuesList = sim.run() #run simuation. returns a dict of final values as well as print them
         newConceptValues = ValuesList[len(ValuesList)-1] 
-        print newConceptValues, "New values are here"
+        print (newConceptValues, "New values are here")
         #if the values returned from the simulation are in the desired range, and 
         #the change is less than the stabilization threshold used in the simulationthen exit the loop 
-        print newConceptValues
-        print restraints
-        print stabilizers
-        print oldConceptValues
+        print (newConceptValues)
+        print (restraints)
+        print (stabilizers)
+        print (oldConceptValues)
         for key in restraints:
             if newConceptValues[key] > restraints[key][0] and newConceptValues[key] < restraints[key][1] and (abs(newConceptValues[key]-oldConceptValues[key])) < stabilizers[key]:
                 done = True

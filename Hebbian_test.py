@@ -54,5 +54,5 @@ restraints = {}
 restraints['Valve3'] = valve3Tup
 restraints['Valve2'] = valve2Tup
 
-print "The result of the hebbian learning was the following edge Matrix:"
-print FCM.Hebbian.hebbian_learning(test_fcm,restraints, hebStableDict,lambda x: 1/(1+exp(-x)),.2,100)
+print ("The result of the hebbian learning was the following edge Matrix:")
+print (FCM.Hebbian.hebbian_learning(test_fcm,restraints, hebStableDict,lambda x: 1/(1+exp(-x)),.2,100))
