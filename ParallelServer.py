@@ -1,7 +1,8 @@
-import time, math
-from Simulation import simulation 
-import pp
-
+import time, math, sys
+from Simulation import * 
+import ppft as pp
+import FCM
+import dispy
 '''
     parallelizeS
     Parameters:
@@ -12,7 +13,7 @@ import pp
 '''
 
 def parallelizeS(fcm, stabilizers):
-    sim = simulation(fcm)
+    sim = FCM.simulation(fcm)
     
     for key in stabilizers:
         sim.stabilize(key,stabilizers[key])
@@ -31,7 +32,8 @@ def parallelizeS(fcm, stabilizers):
 '''
     
 def parallelizeT():
-    return lambda x: 1/(1+math.exp(-x))
+    ans = lambda x: 1/(1+math.exp(-x))
+    return ans
 
 '''
     parallelS
@@ -51,12 +53,25 @@ def parallelS(FCMs):
     print ("Starting pp with", job_server.get_ncpus(), "workers") # number of local processors
     
     start_time = time.time() # begin time
-    
+
+#    job1 = job_server.submit(parallelizeS, args=(fcm, FCMs[fcm],))
+    # Retrieves the result calculated by job1
+    # The value of job1() is the same as sum_primes(100)
+    # If the job has not been finished yet, execution will wait here until result is available
+#    result = job1() 
+#    print ("Fuck is\n\n\n", result)
+#    cluster = dispy.JobCluster(parallelizeS)
+#    jobs = [(fcm, cluster.submit(fcm, FCMs[fcm])) for fcm in FCMs]
     # jobs - the tasks passed to the parallelize function
-    jobs = [(fcm, job_server.submit(parallelizeS, args=(fcm, FCMs[fcm],),depfuncs=(simulation.stabilize, simulation.steps, simulation.changeTransferFunction, simulation.run,),modules=("simulation",))) for fcm in FCMs]    
+    jobs = [(fcm, job_server.submit(func=(parallelizeS), \
+				    args=(fcm, FCMs[fcm],), \
+#		     	depfuncs=(simulation.stabilize, simulation.steps, simulation.changeTransferFunction, simulation.run,), \
+				    modules=("sys","FCM","Simulation",))) for fcm in FCMs]    
+
+#    jobs = [(fcm, job_server.submit(parallelizeS, args=(fcm, FCMs[fcm],) )) for fcm in FCMs]
     for fcm, job in jobs:
         counter += 1
-        print ("Simulation on FCM #", counter, "is", job) # the output of simulation
+        print ("Simulation on FCM #", counter, "is\n\n", job()) # the output of simulation
     
     print ("\nTime elapsed: ", time.time() - start_time, "s\n\n") # end time
     return job_server.print_stats()
@@ -73,14 +88,19 @@ def parallelT(job_count):
     ppservers = ()
     
     job_server = pp.Server(ppservers=ppservers) # creates the job server
-
+# job_server.get_ncpus()
     print ("Starting pp with", job_server.get_ncpus(), "workers") # number of local processors
     
     start_time = time.time() # begin time
     
     # jobs - the tasks passed to the parallelize function
-    jobs = [(i, job_server.submit(parallelizeT)) for i in range(job_count)]
+    jobs = [(i, job_server.submit(func=(parallelizeT),
+				  args=(), 
+           			  modules=("math",))) for i in range(job_count)]
     for i, job in jobs:
-        print ("Transfer function #", i, "is", job) # the lambda transfer function
+                
+         print ("Transfer function #", i, "is", job()) # the lambda transfer function
 
-    print ("\nTime elapsed: ", time.time() - start_time, "s\n\n", job_server.print_stats())
+
+    print ("\nTime elapsed: ", time.time() - start_time, "s\n\n")
+    return job_server.print_stats()

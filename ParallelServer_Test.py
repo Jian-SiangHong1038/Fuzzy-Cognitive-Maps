@@ -112,5 +112,5 @@ sim2.stabilize("Livelihood",.001)
 sim2.run() 
 
 print ("\nTime elapsed: ", time.time() - start_time, "s")
-#print ("\n\nThe result of using the transfer function on a server was:")
-#FCM.ParallelServer.parallelT(10)
+print ("\n\nThe result of using the transfer function on a server was:")
+FCM.ParallelServer.parallelT(10)
